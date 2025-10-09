@@ -30,13 +30,6 @@ resource "azurerm_key_vault" "tfvars" {
       ]
     }
 
-    lifecycle {
-      ignore_changes = [
-        access_policy,
-        # network_acls[0].ip_rules
-      ]
-    }
-
   }
 
   network_acls {
@@ -47,6 +40,13 @@ resource "azurerm_key_vault" "tfvars" {
   }
 
   tags = local.tags
+
+  lifecycle {
+    ignore_changes = [
+      access_policy,
+      # network_acls[0].ip_rules
+    ]
+  }
 }
 
 resource "null_resource" "check_key_vault_secret_age_against_local_tfvars" {
