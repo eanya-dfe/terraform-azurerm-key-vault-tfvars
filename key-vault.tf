@@ -72,4 +72,28 @@ resource "azurerm_key_vault_secret" "tfvars" {
   depends_on = [
     null_resource.check_key_vault_secret_age_against_local_tfvars
   ]
+
+  lifecycle {
+    ignore_changes = [
+      value,
+      expiration_date
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "tfvars_chunks" {
+  for_each = {
+    for idx, chunk in local.tfvars_content_chunks :
+    format("%03d", idx + 1) => chunk
+  }
+
+  name            = "${local.resource_prefix}-tfvars-${each.key}"
+  value           = each.value
+  key_vault_id    = azurerm_key_vault.tfvars.id
+  content_type    = "text/plain+base64-part"
+  expiration_date = local.year_from_now
+
+  depends_on = [
+    null_resource.check_key_vault_secret_age_against_local_tfvars
+  ]
 }
