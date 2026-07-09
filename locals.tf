@@ -10,6 +10,7 @@ locals {
   key_vault_access_ipv4                   = var.key_vault_access_ipv4
   key_vault_access_subnet_ids             = var.key_vault_access_subnet_ids
   key_vault_access_use_rbac_authorization = var.key_vault_access_use_rbac_authorization
+  key_vault_name                          = "${local.resource_prefix}-${var.key_vault_name_suffix}"
   tfvars_filename                         = var.tfvars_filename
   enable_tfvars_file_age_check            = var.enable_tfvars_file_age_check
   enable_diagnostic_setting               = var.enable_diagnostic_setting

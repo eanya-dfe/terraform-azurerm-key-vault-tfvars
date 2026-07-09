@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "tfvars" {
-  name                       = "${local.resource_prefix}-tfvars"
+  name                       = local.key_vault_name
   location                   = local.azure_location
   resource_group_name        = local.resource_group.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
@@ -63,6 +63,8 @@ resource "null_resource" "check_key_vault_secret_age_against_local_tfvars" {
 }
 
 resource "azurerm_key_vault_secret" "tfvars" {
+  count = var.enable_tfvars_backup ? 1 : 0
+
   name            = "${local.resource_prefix}-tfvars"
   value           = base64encode(file(local.tfvars_filename))
   key_vault_id    = azurerm_key_vault.tfvars.id
@@ -82,10 +84,10 @@ resource "azurerm_key_vault_secret" "tfvars" {
 }
 
 resource "azurerm_key_vault_secret" "tfvars_chunks" {
-  for_each = {
+  for_each = var.enable_tfvars_backup ? {
     for idx, chunk in local.tfvars_content_chunks :
     format("%03d", idx + 1) => chunk
-  }
+  } : {}
 
   name            = "${local.resource_prefix}-tfvars-${each.key}"
   value           = each.value

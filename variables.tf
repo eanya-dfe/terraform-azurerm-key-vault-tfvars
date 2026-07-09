@@ -105,3 +105,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "key_vault_name_suffix" {
+  description = "Suffix used for the Key Vault name"
+  type        = string
+  default     = "tfvars"
+}
+
+variable "enable_tfvars_backup" {
+  description = "Controls whether the module stores the tfvars file as Key Vault secrets"
+  type        = bool
+  default     = true
+}
