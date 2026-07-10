@@ -81,6 +81,11 @@ resource "azurerm_key_vault_secret" "tfvars" {
       expiration_date
     ]
   }
+
+  tags = merge(local.tags, {
+    ResourceType = "TfvarsBackupChunk"
+  })
+
 }
 
 resource "azurerm_key_vault_secret" "tfvars_chunks" {
@@ -98,4 +103,9 @@ resource "azurerm_key_vault_secret" "tfvars_chunks" {
   depends_on = [
     null_resource.check_key_vault_secret_age_against_local_tfvars
   ]
+
+  tags = merge(local.tags, {
+    ResourceType = "TfvarsBackupChunk"
+  })
+
 }
