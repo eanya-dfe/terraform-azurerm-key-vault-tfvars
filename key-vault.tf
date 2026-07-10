@@ -50,7 +50,7 @@ resource "azurerm_key_vault" "tfvars" {
 }
 
 resource "null_resource" "check_key_vault_secret_age_against_local_tfvars" {
-  count = local.enable_tfvars_file_age_check ? 1 : 0
+  count = var.enable_tfvars_backup && local.enable_tfvars_file_age_check ? 1 : 0
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
