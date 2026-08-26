@@ -104,6 +104,12 @@ resource "azurerm_key_vault_secret" "tfvars_chunks" {
     null_resource.check_key_vault_secret_age_against_local_tfvars
   ]
 
+  lifecycle {
+    ignore_changes = [
+      expiration_date
+    ]
+  }
+
   tags = merge(local.tags, {
     ResourceType = "TfvarsBackupChunk"
   })
