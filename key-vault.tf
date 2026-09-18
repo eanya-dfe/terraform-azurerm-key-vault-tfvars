@@ -43,7 +43,7 @@ resource "azurerm_key_vault" "tfvars" {
 
   lifecycle {
     ignore_changes = [
-      access_policy,
+      # access_policy,
       # network_acls[0].ip_rules
     ]
   }
